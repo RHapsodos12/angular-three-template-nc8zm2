@@ -1,0 +1,11 @@
+<div class="engine-wrapper">
+  Frame Count: {{frames}}
+  <br />
+  <button (click)="refresh()">Render Frame</button>
+  <button (click)="remove()">Remove Frame </button>
+  <br />
+  <button (click)="destroy()" [disabled]="disabled">Destroy Frame then Render Frame
+    <ng-container *ngIf="disabled">Disabled</ng-container></button>
+  <br />
+  <canvas #rendererCanvas id="renderCanvas"></canvas>
+</div>
