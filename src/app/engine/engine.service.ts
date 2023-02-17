@@ -32,8 +32,8 @@ export class EngineService implements OnDestroy {
   deltaY = 0.01;
   deltaZ = 0.01;
   far = 100;
-  fov = 35;
-  gammaFactor = 2.2;
+  fov = 85;
+  gammaFactor = 2;
   gammaOutput = true;
   near = 1;
   physicallyCorrectLights = true;
@@ -42,14 +42,50 @@ export class EngineService implements OnDestroy {
 
   directionalLightOptions = {
     color: 0xffffff,
-    intensity: 5,
+    intensity: 1,
   };
 
   hemisphereOptions = {
     skyColor: 0xddeeff,
     groundColor: 0x0f0e0d,
-    intensity: 5,
+    intensity: 1,
   };
+
+  // CAMERA
+
+  private createCamera = () => {
+    this.camera = new PerspectiveCamera(
+      this.fov,
+      this.aspect,
+      this.near,
+      this.far
+    );
+
+    // this.camera.position.set(-75, 35, 142);
+    this.camera.position.set(-1.5, 1.5, 10);
+  };
+
+    // CONTROLS
+
+    private createControls = () => this.controls = new OrbitControls(this.camera, this.canvas);
+
+    // LIGHTING
+  
+    private createLight = () => {
+      this.hemisphere = new HemisphereLight(
+        this.hemisphereOptions.skyColor,
+        this.hemisphereOptions.groundColor,
+        this.hemisphereOptions.intensity
+      );
+  
+      this.mainLight = new DirectionalLight(
+        this.directionalLightOptions.color,
+        this.directionalLightOptions.intensity
+      );
+      this.mainLight.position.set(10, 10, 10);
+  
+      this.scene.add(this.hemisphere, this.mainLight);
+    }
 
   public constructor(private ngZone: NgZone) {}
 
@@ -63,6 +99,11 @@ export class EngineService implements OnDestroy {
     // The first step is to get the reference of the canvas element from our HTML document
     this.canvas = canvas.nativeElement;
 
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+
+    this.renderer.gammaFactor = this.gammaFactor;
+    this.renderer.physicallyCorrectLights = true;
+
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true, // transparent background
@@ -73,24 +114,24 @@ export class EngineService implements OnDestroy {
     // create the scene
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    this.camera.position.z = 5;
-    this.scene.add(this.camera);
+    // this.camera = new THREE.PerspectiveCamera(
+    //   75,
+    //   window.innerWidth / window.innerHeight,
+    //   0.1,
+    //   1000
+    // );
+    // this.camera.position.z = 5;
+    // this.scene.add(this.camera);
 
     // soft white light
-    this.light = new THREE.AmbientLight(0x404040);
-    this.light.position.z = 10;
-    this.scene.add(this.light);
+    // this.light = new THREE.AmbientLight(0xffffff);
+    // this.light.position.z = 10;
+    // this.scene.add(this.light);
 
     const loader = new GLTFLoader();
 
     let modelUrl =
-      'https://gateway.pinata.cloud/ipfs/QmY6B4Z65YBVF8VWDgMGJFV1dFzomRXDWkwpm8A5uRw7kp?_gl=1*1qg9xi*_ga*NzM4MTUyNzAxLjE2NzYzOTc2OTc.*_ga_5RMPXG14TE*MTY3NjY1MDYwNi41LjAuMTY3NjY1MDYwOS41Ny4wLjA.';
+      'https://gateway.pinata.cloud/ipfs/QmQQJqt1LZS2pQPaeeULw7emWaGkXAS8recaWSh81bS9tM?_gl=1*3jqrki*_ga*NzM4MTUyNzAxLjE2NzYzOTc2OTc.*_ga_5RMPXG14TE*MTY3NjY1MDYwNi41LjAuMTY3NjY1MDYwOS41Ny4wLjA.';
 
     loader.load(
       modelUrl,
@@ -102,6 +143,10 @@ export class EngineService implements OnDestroy {
         console.error(error);
       }
     );
+
+    this.createCamera();
+    this.createControls();
+    this.createLight();
 
     // const geometry = new THREE.BoxGeometry(1, 1, 1);
     // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
