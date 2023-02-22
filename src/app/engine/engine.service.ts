@@ -62,30 +62,31 @@ export class EngineService implements OnDestroy {
     );
 
     // this.camera.position.set(-75, 35, 142);
-    this.camera.position.set(-1.5, 1.5, 10);
+    this.camera.position.set(-5, 5, 12);
   };
 
-    // CONTROLS
+  // CONTROLS
 
-    private createControls = () => this.controls = new OrbitControls(this.camera, this.canvas);
+  private createControls = () =>
+    (this.controls = new OrbitControls(this.camera, this.canvas));
 
-    // LIGHTING
-  
-    private createLight = () => {
-      this.hemisphere = new HemisphereLight(
-        this.hemisphereOptions.skyColor,
-        this.hemisphereOptions.groundColor,
-        this.hemisphereOptions.intensity
-      );
-  
-      this.mainLight = new DirectionalLight(
-        this.directionalLightOptions.color,
-        this.directionalLightOptions.intensity
-      );
-      this.mainLight.position.set(10, 10, 10);
-  
-      this.scene.add(this.hemisphere, this.mainLight);
-    }
+  // LIGHTING
+
+  private createLight = () => {
+    this.hemisphere = new HemisphereLight(
+      this.hemisphereOptions.skyColor,
+      this.hemisphereOptions.groundColor,
+      this.hemisphereOptions.intensity
+    );
+
+    this.mainLight = new DirectionalLight(
+      this.directionalLightOptions.color,
+      this.directionalLightOptions.intensity
+    );
+    this.mainLight.position.set(10, 10, 10);
+
+    this.scene.add(this.hemisphere, this.mainLight);
+  };
 
   public constructor(private ngZone: NgZone) {}
 
@@ -131,7 +132,7 @@ export class EngineService implements OnDestroy {
     const loader = new GLTFLoader();
 
     let modelUrl =
-      'https://gateway.pinata.cloud/ipfs/QmQQJqt1LZS2pQPaeeULw7emWaGkXAS8recaWSh81bS9tM?_gl=1*3jqrki*_ga*NzM4MTUyNzAxLjE2NzYzOTc2OTc.*_ga_5RMPXG14TE*MTY3NjY1MDYwNi41LjAuMTY3NjY1MDYwOS41Ny4wLjA.';
+      'https://gateway.pinata.cloud/ipfs/QmYBbjkunwfJYjMQZZRYCnfFupBbTHmwKHqxAeEJMGokGk?_gl=1*yrtv8z*_ga*NzM4MTUyNzAxLjE2NzYzOTc2OTc.*_ga_5RMPXG14TE*MTY3NzEwMTI4Ni43LjEuMTY3NzEwMTI5Ni41MC4wLjA.';
 
     loader.load(
       modelUrl,
